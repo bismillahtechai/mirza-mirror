@@ -5,8 +5,12 @@ services:
     env: python
     region: ohio
     plan: free
-    buildCommand: cd app && pip install -r ../requirements.txt
-    startCommand: cd app && uvicorn main:app --host 0.0.0.0
+    healthCheckPath: /health
+    autoDeploy: true
+    dependsOn:
+      - mirza-mirror-db
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0
     envVars:
       - key: OPENAI_API_KEY
         sync: false
@@ -20,6 +24,8 @@ services:
         value: info
       - key: CORS_ORIGINS
         value: https://mirza-mirror-web.onrender.com
+      - key: PYTHONPATH
+        value: /opt/render/project/src
   
   - type: web
     name: mirza-mirror-web
@@ -28,6 +34,8 @@ services:
     plan: free
     buildCommand: cd mobile/web && npm install && npm run build
     startCommand: cd mobile/web && npm start
+    healthCheckPath: /
+    autoDeploy: true
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://mirza-mirror-api.onrender.com
