@@ -16,10 +16,12 @@ This document provides step-by-step instructions for deploying the Mirza Mirror 
 3. Select "Blueprint" from the dropdown menu
 4. Connect to your GitHub repository containing the Mirza Mirror code
 5. Render will automatically detect the `render.yaml` file
-6. Review the services to be created:
-   - `mirza-mirror-api` (FastAPI backend)
-   - `mirza-mirror-web` (Next.js web app)
-   - `mirza-mirror-db` (PostgreSQL database)
+6. Review the services and databases to be created:
+   - Services:
+     - `mirza-mirror-api` (FastAPI backend)
+     - `mirza-mirror-web` (Next.js web app)
+   - Databases:
+     - `mirza-mirror-db` (PostgreSQL database)
 
 ### Step 3: Configure Environment Variables
 
@@ -109,7 +111,10 @@ This document provides step-by-step instructions for deploying the Mirza Mirror 
 
 ### Render Deployment Issues
 
-- **Database Connection Errors**: Check the DATABASE_URL environment variable and ensure it's correctly formatted
+- **Database Connection Errors**: If you encounter database connection issues, verify that:
+  - The PostgreSQL database was successfully created in Render
+  - The DATABASE_URL environment variable is correctly linked to the database using `fromDatabase` in render.yaml
+  - The SQLAlchemy connection string format is correct (our code includes a fix for "postgres://" vs "postgresql://" prefixes)
 - **API Service Failures**: Verify all required environment variables are set
 - **CORS Issues**: Ensure the CORS_ORIGINS environment variable includes all necessary frontend URLs
 

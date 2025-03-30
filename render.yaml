@@ -12,7 +12,9 @@ services:
       - key: OPENAI_API_KEY
         sync: false
       - key: DATABASE_URL
-        value: postgres://postgres:postgres@postgres:5432/mirza_mirror
+        fromDatabase:
+          name: mirza-mirror-db
+          property: connectionString
       - key: ENVIRONMENT
         value: production
       - key: LOG_LEVEL
@@ -33,12 +35,6 @@ services:
       - key: NODE_ENV
         value: production
 
-  - type: postgres
-    name: postgres
-    region: ohio
-    plan: starter
-    ipAllowList: []
-    
 databases:
   - name: mirza-mirror-db
     plan: starter
