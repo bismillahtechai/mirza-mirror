@@ -4,7 +4,7 @@ services:
     name: mirza-mirror-api
     env: python
     region: ohio
-    plan: starter
+    plan: free
     buildCommand: cd app && pip install -r ../requirements.txt
     startCommand: cd app && uvicorn main:app --host 0.0.0.0
     envVars:
@@ -25,7 +25,7 @@ services:
     name: mirza-mirror-web
     env: node
     region: ohio
-    plan: starter
+    plan: free
     buildCommand: cd mobile/web && npm install && npm run build
     startCommand: cd mobile/web && npm start
     envVars:
@@ -36,6 +36,6 @@ services:
 
 databases:
   - name: mirza-mirror-db
-    plan: starter
+    plan: free
     region: ohio
     ipAllowList: []
