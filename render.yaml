@@ -1,0 +1,46 @@
+version: 1
+buildCommand: cd app && pip install -r ../requirements.txt && uvicorn main:app --host 0.0.0.0 --port $PORT
+services:
+  - type: web
+    name: mirza-mirror-api
+    env: python
+    region: ohio
+    plan: starter
+    buildCommand: cd app && pip install -r ../requirements.txt
+    startCommand: cd app && uvicorn main:app --host 0.0.0.0
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        value: postgres://postgres:postgres@postgres:5432/mirza_mirror
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        value: https://mirza-mirror-web.onrender.com
+  
+  - type: web
+    name: mirza-mirror-web
+    env: node
+    region: ohio
+    plan: starter
+    buildCommand: cd mobile/web && npm install && npm run build
+    startCommand: cd mobile/web && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://mirza-mirror-api.onrender.com
+      - key: NODE_ENV
+        value: production
+
+  - type: postgres
+    name: postgres
+    region: ohio
+    plan: starter
+    ipAllowList: []
+    
+databases:
+  - name: mirza-mirror-db
+    plan: starter
+    region: ohio
+    ipAllowList: []
